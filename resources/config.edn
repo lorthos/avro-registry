@@ -1,0 +1,10 @@
+{:port 3000
+ :db   {:classname   "org.postgresql.Driver"
+        :subprotocol "postgresql"
+        :subname     "//localhost:5432/development"
+        :user        "a"
+        :password    "a"}
+ }
+
+;postgres createuser clojure_test -P clojure_test
+;postgres createdb clojure_test -O clojure_test
