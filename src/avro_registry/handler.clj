@@ -1,9 +1,7 @@
 (ns avro-registry.handler
   (:require [compojure.core :refer :all]
-            [compojure.route :as route]
             [compojure.handler :as handler]
             [ring.middleware.json :as middleware]
-            [compojure.route :as route]
             [avro-registry.store :as store])
   )
 
@@ -15,8 +13,7 @@
            (GET "/:subject/all" [subject] (store/get-all-schemas subject))
            (GET "/:subject/config" [subject] (store/get-config subject))
            (GET "/:subject/latest" [subject] (store/get-latest-schema subject))
-           (GET "/:subject/id/:id" [subject id] (store/get-schema subject id))
-           (route/not-found "Not Found"))
+           (GET "/:subject/id/:id" [subject id] (store/get-schema subject id)))
 
 (def app
   (-> (handler/api app-routes)

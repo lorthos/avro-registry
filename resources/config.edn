@@ -2,8 +2,8 @@
  :db   {:classname   "org.postgresql.Driver"
         :subprotocol "postgresql"
         :subname     "//localhost:5432/development"
-        :user        "a"
-        :password    "a"}
+        :user        "halit"
+        :password    "aaaaaaaa"}
  }
 
 ;postgres createuser clojure_test -P clojure_test

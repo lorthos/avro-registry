@@ -48,9 +48,15 @@
   )
 
 (defn get-latest-schema [subject]
-  (j/query (db) [(str "SELECT * from " (name (->table subject)) " ORDER BY id DESC LIMIT 1")])
+  (let [result (j/query (db) [(str "SELECT * from " (name (->table subject)) " ORDER BY id DESC LIMIT 1")])]
+    (->> result
+         first
+         :schema))
   )
 
 (defn get-schema [subject id]
-  (j/query (db) [(str "SELECT * from " (name (->table subject)) " WHERE id = ?") (read-string id)])
+  (let [result (j/query (db) [(str "SELECT * from " (name (->table subject)) " WHERE id = ?") (read-string id)])]
+    (->> result
+         first
+         :schema))
   )
