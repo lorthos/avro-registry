@@ -1,5 +1,10 @@
+# -*- restclient -*-
+#
 # health check
 GET http://localhost:3000/ping
+
+# list all subjects
+GET http://localhost:3000/
 
 # create subject
 PUT http://localhost:3000/subject1
@@ -20,4 +25,4 @@ GET http://localhost:3000/subject1/all
 GET http://localhost:3000/subject1/latest
 
 #get schema with specific version
-http://localhost:3000/subject1/id/1
+GET http://localhost:3000/subject1/id/2

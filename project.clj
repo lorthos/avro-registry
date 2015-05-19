@@ -8,7 +8,7 @@
                            ;rest
                            [compojure "1.3.4"]
                            [ring/ring-json "0.3.1"]
-                           [ring/ring-defaults "0.1.5"]
+                           [liberator "0.13"]
 
                            ;db
                            [com.mchange/c3p0 "0.9.2.1"]
@@ -21,7 +21,7 @@
                            ;avro
                            [org.apache.avro/avro "1.7.7"]
                            ]
-            :plugins [[lein-ring "0.8.13"]]
+            :plugins [[lein-ring "0.9.3"]]
             :ring {:handler avro-registry.handler/app}
             :profiles
             {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]

@@ -25,7 +25,11 @@
   (keyword (str "subject_" subject)))
 
 (defn get-subjects-list []
-  (filter #(.startsWith (:tablename %) "subject_") (j/query (db) "SELECT * FROM pg_catalog.pg_tables"))
+  (->> (j/query (db) "SELECT * FROM pg_catalog.pg_tables")
+       (filter #(.startsWith (:tablename %) "subject_"))
+       (map #(:tablename %))
+       (map #(subs % 8))
+       )
   )
 
 (defn create-subject [subject]
