@@ -22,13 +22,8 @@ To start a web server for the application, run:
 
 ## Usage
 
-    curl http://localhost:3000/ping
-    curl -X PUT http://localhost:3000/subject1
-    curl -X PUT http://localhost:3000/subject1/register  -H "Content-Type: application/json" -d '{ "a" : "asd" }'
+check sample file
 
-    curl -X GET http://localhost:3000/subject1/all
-    curl -X GET http://localhost:3000/subject1/latest
-    curl -X GET http://localhost:3000/subject1/id/1
 
 
 ## License

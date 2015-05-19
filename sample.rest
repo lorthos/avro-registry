@@ -1,0 +1,23 @@
+# health check
+GET http://localhost:3000/ping
+
+# create subject
+PUT http://localhost:3000/subject1
+
+#register new schema
+PUT http://localhost:3000/subject1/register
+Content-Type: application/json
+
+{ 
+  "a" : "asd" 
+}
+
+
+#get all schemas
+GET http://localhost:3000/subject1/all
+
+#get latest schema
+GET http://localhost:3000/subject1/latest
+
+#get schema with specific version
+http://localhost:3000/subject1/id/1
