@@ -14,7 +14,15 @@ PUT http://localhost:3000/subject1/register
 Content-Type: application/json
 
 {
-  "a" : "asd"
+  "namespace": "example.avro",
+  "type": "record",
+  "name": "User",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    }
+  ]
 }
 
 
@@ -26,3 +34,48 @@ GET http://localhost:3000/subject1/latest
 
 #get schema with specific version
 GET http://localhost:3000/subject1/id/2
+
+#register new schema - incompatible
+PUT http://localhost:3000/subject1/register
+Content-Type: application/json
+
+{
+  "namespace": "example.avro",
+  "type": "record",
+  "name": "User",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "favorite_number",
+      "type": "int"
+    }
+  ]
+}
+
+
+#register new schema - compatible
+PUT http://localhost:3000/subject1/register
+Content-Type: application/json
+
+{
+  "namespace": "example.avro",
+  "type": "record",
+  "name": "User",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "favorite_number",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null
+    }
+  ]
+}

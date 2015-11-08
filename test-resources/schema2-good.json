@@ -10,9 +10,10 @@
     {
       "name": "favorite_number",
       "type": [
-        "int",
-        "null"
-      ]
+        "null",
+        "int"
+      ],
+      "default": null
     }
   ]
 }

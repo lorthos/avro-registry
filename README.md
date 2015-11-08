@@ -1,10 +1,11 @@
 ## avro-registry
 
-Simple Rest Application to serve as a central registry for Avro Schemas
+Simple Rest Application to serve as a central registry for Avro Schemas.
+Uses a RDBMS for storing schemas and version numbers, hast built in full avro validation
 
 
 ## TODO
-* achema validation
+* configurable validation
 * proper content types
 
 ## Prerequisites

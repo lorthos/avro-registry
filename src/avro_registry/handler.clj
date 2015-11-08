@@ -14,7 +14,7 @@
                                  :handle-ok (store/get-subjects-list)))
 
            (PUT "/:subject" [subject] (store/create-subject subject))
-           (PUT "/:subject/register" {{subject :subject} :params body :body} (store/register-schema subject body))
+           (PUT "/:subject/register" {{subject :subject} :params body :body} (store/register-schema! subject body))
 
            (GET "/:subject/all" [subject]
              (resource :available-media-types ["application/json"]

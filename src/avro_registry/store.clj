@@ -2,7 +2,8 @@
   (:import com.mchange.v2.c3p0.ComboPooledDataSource)
   (:require [clojure.java.jdbc :as j]
             [avro-registry.env :as e]
-            [cheshire.core :refer :all]))
+            [cheshire.core :refer :all]
+            [avro-registry.validator :as val]))
 
 (def spec (:db e/props))
 
@@ -28,28 +29,25 @@
   (->> (j/query (db) "SELECT * FROM pg_catalog.pg_tables")
        (filter #(.startsWith (:tablename %) "subject_"))
        (map #(:tablename %))
-       (map #(subs % 8))
-       )
-  )
+       (map #(subs % 8))))
 
 (defn create-subject [subject]
   (j/db-do-commands (db) (j/create-table-ddl (->table subject)
                                              [:id :smallserial "PRIMARY KEY"]
-                                             [:schema "varchar(4096)"]))
+                                             [:schema "varchar(4096)"])))
+
+(defn get-config [subject]
+  ;TODO get old config
+  {}
   )
 
-(defn register-schema [subject body]
-  (j/insert! (db) (->table subject) {:schema (generate-string body)})
-  )
+
 
 (defn get-all-schemas [subject]
   (j/query (db) [(str "SELECT * from " (name (->table subject)))])
   )
 
-(defn get-config [subject]
-  ;TODO
-  (println subject)
-  )
+
 
 (defn get-latest-schema [subject]
   (let [result (j/query (db) [(str "SELECT * from " (name (->table subject)) " ORDER BY id DESC LIMIT 1")])]
@@ -63,4 +61,16 @@
     (->> result
          first
          :schema))
+  )
+
+(defn register-schema! [subject body]
+  (let [new-schema-string (generate-string body)
+        new-schema (val/parse new-schema-string)
+        subject-config (get-config subject)
+        latest-schema-string (get-latest-schema subject)]
+    (when latest-schema-string
+      (let [latest-schema (val/parse latest-schema-string)]
+        (val/validate!! subject-config new-schema latest-schema)))
+    (j/insert! (db) (->table subject) {:schema new-schema-string})
+    )
   )
