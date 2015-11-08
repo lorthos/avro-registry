@@ -34,7 +34,8 @@
     (try
       (handler request)
       (catch Exception e
-        {:status 500 :body "Handler Failed"}))))
+        {:status 500 :body (str "Handler Failed with:"
+                                (apply str (interpose "\n" (.getStackTrace e))))}))))
 
 (def app
   (-> (handler/api app-routes)
