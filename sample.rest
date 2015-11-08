@@ -79,3 +79,6 @@ Content-Type: application/json
     }
   ]
 }
+
+# 404
+GET http://localhost:3000/invalid

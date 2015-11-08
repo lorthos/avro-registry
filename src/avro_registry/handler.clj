@@ -28,7 +28,16 @@
            (GET "/:subject/id/:id" [subject id] (resource :available-media-types ["application/json"]
                                                           :handle-ok (store/get-schema subject id))))
 
+(defn wrap-error
+  [handler]
+  (fn [request]
+    (try
+      (handler request)
+      (catch Exception e
+        {:status 500 :body "Handler Failed"}))))
+
 (def app
   (-> (handler/api app-routes)
       (middleware/wrap-json-body {:keywords? false})
-      (middleware/wrap-json-response)))
+      (middleware/wrap-json-response)
+      (wrap-error)))
