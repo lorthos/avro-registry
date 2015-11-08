@@ -13,8 +13,8 @@ PUT http://localhost:3000/subject1
 PUT http://localhost:3000/subject1/register
 Content-Type: application/json
 
-{ 
-  "a" : "asd" 
+{
+  "a" : "asd"
 }
 
 
