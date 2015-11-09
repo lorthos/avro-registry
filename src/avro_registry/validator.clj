@@ -1,5 +1,6 @@
 (ns avro-registry.validator
-  (:require [clojure.tools.logging :as log])
+  (:require [clojure.tools.logging :as log]
+            [avro-registry.env :as e])
   (:import (org.apache.avro SchemaValidator SchemaValidatorBuilder Schema Schema$Parser)))
 
 (def validators {:no-op    (proxy [SchemaValidator] []
@@ -23,10 +24,9 @@
 
   )
 
-(def default-validator-config {:validator :full})
 
-(defn validate!! [config ^Schema new-schema ^Schema old-schema]
-  (let [^SchemaValidator validator ((:validator (merge default-validator-config config)) validators)
+(defn validate!! [^Schema new-schema ^Schema old-schema]
+  (let [^SchemaValidator validator ((:validator e/props) validators)
         old-schema-as-list (doto (java.util.ArrayList.) (.add old-schema))]
     (.validate validator new-schema old-schema-as-list)
     )

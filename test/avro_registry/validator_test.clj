@@ -10,6 +10,6 @@
 
 (deftest test-validator
   (testing "backward compatibility"
-    (is (nil? (val/validate!! {} schema2-good schema1)))
-    (is (thrown? SchemaValidationException (val/validate!! {} schema2-bad schema1)))
+    (is (nil? (val/validate!! schema2-good schema1)))
+    (is (thrown? SchemaValidationException (val/validate!! schema2-bad schema1)))
     ))

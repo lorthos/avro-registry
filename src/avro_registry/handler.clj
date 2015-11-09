@@ -1,6 +1,7 @@
 (ns avro-registry.handler
   (:require [compojure.core :refer :all]
             [compojure.handler :as handler]
+            [compojure.route :as route]
             [ring.middleware.json :as middleware]
             [avro-registry.store :as store]
             [liberator.core :refer [resource defresource]])
@@ -20,13 +21,14 @@
              (resource :available-media-types ["application/json"]
                        :handle-ok (store/get-all-schemas subject)))
 
-           (GET "/:subject/config" [subject] (store/get-config subject))
-
            (GET "/:subject/latest" [subject] (resource :available-media-types ["application/json"]
                                                        :handle-ok (store/get-latest-schema subject)))
 
            (GET "/:subject/id/:id" [subject id] (resource :available-media-types ["application/json"]
-                                                          :handle-ok (store/get-schema subject id))))
+                                                          :handle-ok (store/get-schema subject id)))
+           (route/not-found (resource :available-media-types ["application/json"]
+                                      :handle-ok {:error "does not exist"}))
+           )
 
 (defn wrap-error
   [handler]
@@ -34,7 +36,7 @@
     (try
       (handler request)
       (catch Exception e
-        {:status 500 :body (str "Handler Failed with:"
+        {:status 500 :body (str "Handler Failed with: \n"
                                 (apply str (interpose "\n" (.getStackTrace e))))}))))
 
 (def app

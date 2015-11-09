@@ -23,11 +23,11 @@
 (defn db [] @pooled-db)
 
 (defn ->table [subject]
-  (keyword (str "subject_" subject)))
+  (keyword (str (:table-prefix e/props) subject)))
 
 (defn get-subjects-list []
   (->> (j/query (db) "SELECT * FROM pg_catalog.pg_tables")
-       (filter #(.startsWith (:tablename %) "subject_"))
+       (filter #(.startsWith (:tablename %) (:table-prefix e/props)))
        (map #(:tablename %))
        (map #(subs % 8))))
 
@@ -35,19 +35,9 @@
   (j/db-do-commands (db) (j/create-table-ddl (->table subject)
                                              [:id :smallserial "PRIMARY KEY"]
                                              [:schema "varchar(4096)"])))
-
-(defn get-config [subject]
-  ;TODO get old config
-  {}
-  )
-
-
-
 (defn get-all-schemas [subject]
   (j/query (db) [(str "SELECT * from " (name (->table subject)))])
   )
-
-
 
 (defn get-latest-schema [subject]
   (let [result (j/query (db) [(str "SELECT * from " (name (->table subject)) " ORDER BY id DESC LIMIT 1")])]
@@ -66,11 +56,10 @@
 (defn register-schema! [subject body]
   (let [new-schema-string (generate-string body)
         new-schema (val/parse new-schema-string)
-        subject-config (get-config subject)
         latest-schema-string (get-latest-schema subject)]
     (when latest-schema-string
       (let [latest-schema (val/parse latest-schema-string)]
-        (val/validate!! subject-config new-schema latest-schema)))
+        (val/validate!! new-schema latest-schema)))
     (j/insert! (db) (->table subject) {:schema new-schema-string})
     )
   )
