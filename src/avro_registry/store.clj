@@ -32,9 +32,11 @@
        (map #(subs % 8))))
 
 (defn create-subject [subject]
-  (j/db-do-commands (db) (j/create-table-ddl (->table subject)
-                                             [:id :smallserial "PRIMARY KEY"]
-                                             [:schema "varchar(4096)"])))
+  (j/db-do-commands (db)
+                    (str "CREATE TABLE IF NOT EXISTS "
+                         (name (->table subject))
+                         " (id smallserial PRIMARY KEY, schema varchar(4096))")))
+
 (defn get-all-schemas [subject]
   (j/query (db) [(str "SELECT * from " (name (->table subject)))])
   )
